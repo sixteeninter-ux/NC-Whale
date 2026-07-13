@@ -1,0 +1,627 @@
+```html
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+
+  <meta
+    name="description"
+    content="NC Whale Stake — Buy NC packages, auto stake and earn NC rewards on BNB Smart Chain."
+  />
+
+  <meta name="theme-color" content="#061326" />
+
+  <title>NC Whale Stake</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- =========================================================
+       APP HEADER
+  ========================================================== -->
+
+  <header class="app-header">
+
+    <div class="brand">
+
+      <div class="brand-logo">
+        NC
+      </div>
+
+      <div class="brand-text">
+        <h1>NC Whale Stake</h1>
+        <p>Sixteen Chain Ecosystem • BSC Mainnet</p>
+      </div>
+
+    </div>
+
+    <div class="wallet-actions">
+
+      <button
+        id="walletAddressBtn"
+        class="btn btn-wallet"
+        type="button"
+        disabled
+      >
+        Not Connected
+      </button>
+
+      <button
+        id="connectBtn"
+        class="btn btn-gold"
+        type="button"
+      >
+        Connect Wallet
+      </button>
+
+      <button
+        id="refreshBtn"
+        class="btn btn-dark"
+        type="button"
+      >
+        Refresh
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =========================================================
+       STATUS MESSAGE
+  ========================================================== -->
+
+  <section class="status-section">
+
+    <div
+      id="statusBox"
+      class="status-box info"
+    >
+      Connect your wallet to start.
+    </div>
+
+  </section>
+
+
+  <!-- =========================================================
+       NETWORK AND BALANCES
+  ========================================================== -->
+
+  <main class="main-container">
+
+    <section class="section-card">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>Wallet Overview</h2>
+          <p>Current wallet and token information</p>
+        </div>
+
+        <div
+          id="networkBadge"
+          class="network-badge"
+        >
+          BSC Mainnet
+        </div>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <article class="stat-card">
+          <span class="stat-label">Wallet USDT</span>
+          <strong id="walletUsdt">0 USDT</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Wallet NC</span>
+          <strong id="walletNc">0 NC</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Total Purchased</span>
+          <strong id="totalPurchased">0 USDT</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Referral Received</span>
+          <strong id="referralReceived">0 USDT</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Purchase Count</span>
+          <strong id="purchaseCount">0</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Stake Positions</span>
+          <strong id="stakeCount">0</strong>
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         REFERRAL LINK
+    ======================================================== -->
+
+    <section class="section-card">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>Direct Referral</h2>
+          <p>Referral bonus is paid one direct level only</p>
+        </div>
+
+        <span
+          id="referralPercentBadge"
+          class="percentage-badge"
+        >
+          5%
+        </span>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="sponsorInput">
+          Sponsor Address
+        </label>
+
+        <input
+          id="sponsorInput"
+          class="input-field"
+          type="text"
+          placeholder="0x..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+
+        <small class="help-text">
+          Sponsor will be permanently locked after the first purchase.
+        </small>
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="referralLinkInput">
+          Your Referral Link
+        </label>
+
+        <div class="input-action-row">
+
+          <input
+            id="referralLinkInput"
+            class="input-field"
+            type="text"
+            value=""
+            readonly
+            placeholder="Connect wallet to generate referral link"
+          />
+
+          <button
+            id="copyReferralBtn"
+            class="btn btn-cyan"
+            type="button"
+            disabled
+          >
+            Copy
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="referral-info-grid">
+
+        <div class="mini-info-card">
+          <span>Your Sponsor</span>
+          <strong id="lockedSponsor">Not registered</strong>
+        </div>
+
+        <div class="mini-info-card">
+          <span>Sponsor Status</span>
+          <strong id="sponsorStatus">Unlocked</strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         PACKAGE LIST
+    ======================================================== -->
+
+    <section class="section-card">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>NC Whale Packages</h2>
+          <p>Select a package to purchase and auto stake NC</p>
+        </div>
+
+        <button
+          id="reloadPackagesBtn"
+          class="btn btn-dark"
+          type="button"
+        >
+          Reload Packages
+        </button>
+
+      </div>
+
+      <div
+        id="packageList"
+        class="package-grid"
+      >
+
+        <div class="loading-card">
+          Package information will appear after wallet connection.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         SELECTED PACKAGE
+    ======================================================== -->
+
+    <section class="section-card">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>Purchase Summary</h2>
+          <p>Review package details before approving USDT</p>
+        </div>
+
+      </div>
+
+      <div class="purchase-summary-grid">
+
+        <div class="summary-item">
+          <span>Selected Package</span>
+          <strong id="selectedPackageName">None</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Package ID</span>
+          <strong id="selectedPackageId">-</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Price</span>
+          <strong id="selectedPackagePrice">0 USDT</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>NC Principal</span>
+          <strong id="selectedPrincipalNc">0 NC</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Daily Reward</span>
+          <strong id="selectedDailyReward">0%</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Stake Duration</span>
+          <strong id="selectedLockTime">0</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Total Reward</span>
+          <strong id="selectedRewardNc">0 NC</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Claim at Maturity</span>
+          <strong id="selectedTotalNc">0 NC</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Direct Referral</span>
+          <strong id="selectedReferralUsdt">0 USDT</strong>
+        </div>
+
+        <div class="summary-item">
+          <span>Owner Allocation</span>
+          <strong id="selectedOwnerUsdt">0 USDT</strong>
+        </div>
+
+      </div>
+
+      <div class="purchase-action-row">
+
+        <button
+          id="approveBtn"
+          class="btn btn-gold btn-large"
+          type="button"
+          disabled
+        >
+          Approve USDT
+        </button>
+
+        <button
+          id="buyBtn"
+          class="btn btn-cyan btn-large"
+          type="button"
+          disabled
+        >
+          Buy & Auto Stake
+        </button>
+
+      </div>
+
+      <div class="allowance-box">
+
+        <span>USDT Allowance</span>
+
+        <strong id="usdtAllowance">
+          0 USDT
+        </strong>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         MY STAKING SUMMARY
+    ======================================================== -->
+
+    <section class="section-card">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>My Staking</h2>
+          <p>NC principal and rewards are claimable after maturity</p>
+        </div>
+
+        <button
+          id="refreshStakesBtn"
+          class="btn btn-dark"
+          type="button"
+        >
+          Refresh Stakes
+        </button>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <article class="stat-card">
+          <span class="stat-label">Active Principal</span>
+          <strong id="activePrincipalNc">0 NC</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Pending Reward</span>
+          <strong id="pendingRewardNc">0 NC</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Matured Total</span>
+          <strong id="maturedTotalNc">0 NC</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Claimed Total</span>
+          <strong id="claimedTotalNc">0 NC</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Next Unlock</span>
+          <strong id="nextUnlockCountdown">-</strong>
+        </article>
+
+        <article class="stat-card">
+          <span class="stat-label">Contract NC Reserve</span>
+          <strong id="stakingNcBalance">0 NC</strong>
+        </article>
+
+      </div>
+
+      <div
+        id="stakeList"
+        class="stake-list"
+      >
+
+        <div class="loading-card">
+          No staking positions loaded.
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =======================================================
+         CONTRACT INFORMATION
+    ======================================================== -->
+
+    <section class="section-card contract-section">
+
+      <div class="section-title-row">
+
+        <div>
+          <h2>Verified Contracts</h2>
+          <p>NC Whale system deployed on BNB Smart Chain</p>
+        </div>
+
+      </div>
+
+      <div class="contract-list">
+
+        <div class="contract-row">
+
+          <div>
+            <span>Package Contract</span>
+            <strong id="packageContractText">
+              0x15D4...1144
+            </strong>
+          </div>
+
+          <button
+            class="btn btn-small btn-dark"
+            type="button"
+            data-copy-contract="package"
+          >
+            Copy
+          </button>
+
+        </div>
+
+        <div class="contract-row">
+
+          <div>
+            <span>Staking Contract</span>
+            <strong id="stakingContractText">
+              0x4C98...D4f2
+            </strong>
+          </div>
+
+          <button
+            class="btn btn-small btn-dark"
+            type="button"
+            data-copy-contract="staking"
+          >
+            Copy
+          </button>
+
+        </div>
+
+        <div class="contract-row">
+
+          <div>
+            <span>Core Contract</span>
+            <strong id="coreContractText">
+              0x248C...3957
+            </strong>
+          </div>
+
+          <button
+            class="btn btn-small btn-dark"
+            type="button"
+            data-copy-contract="core"
+          >
+            Copy
+          </button>
+
+        </div>
+
+        <div class="contract-row">
+
+          <div>
+            <span>NC Token</span>
+            <strong id="ncContractText">
+              0xA0db...2108
+            </strong>
+          </div>
+
+          <button
+            class="btn btn-small btn-dark"
+            type="button"
+            data-copy-contract="nc"
+          >
+            Copy
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================================================
+       TRANSACTION MODAL
+  ========================================================== -->
+
+  <div
+    id="transactionModal"
+    class="modal-overlay hidden"
+  >
+
+    <div class="modal-card">
+
+      <div
+        id="modalSpinner"
+        class="spinner"
+      ></div>
+
+      <h3 id="modalTitle">
+        Processing Transaction
+      </h3>
+
+      <p id="modalMessage">
+        Please confirm the transaction in your wallet.
+      </p>
+
+      <button
+        id="closeModalBtn"
+        class="btn btn-dark hidden"
+        type="button"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================================================
+       FOOTER
+  ========================================================== -->
+
+  <footer class="app-footer">
+
+    <strong>NC Whale Stake</strong>
+
+    <p>
+      Sixteen Chain Ecosystem • BNB Smart Chain
+    </p>
+
+    <small>
+      USDT purchases are sent to the direct sponsor and owner wallet.
+      NC principal and rewards depend on sufficient NC reserves in the
+      staking contract.
+    </small>
+
+  </footer>
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"
+  ></script>
+
+  <script src="config.js"></script>
+  <script src="abi.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
